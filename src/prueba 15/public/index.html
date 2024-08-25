@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="img/logo.png" type="image/x-icon">
+    <title>Estacionamiento</title>
+
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            background-color: white; 
+            color: gray; 
+            text-align: center; 
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .sensor {
+            display: flex;
+            flex-direction: column; /* Alinea los elementos en columna */
+            align-items: center; /* Centra los elementos horizontalmente */
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f5f5f5;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            height: 200px; /* Altura fija para los cuadros */
+            justify-content: center; /* Centra el contenido verticalmente */
+        }
+
+        .sensor div {
+            font-weight: bold; 
+            margin-bottom: 10px; /* Espacio entre el texto y el cuadro de color */
+        }
+
+        .sensor span {
+            padding: 30px; /* Tamaño del cuadro de color */
+            border-radius: 8px;
+            display: inline-block;
+            min-width: 150px;
+            font-size: 24px; /* Tamaño de la fuente */
+            text-align: center; /* Centra el texto dentro del cuadro de color */
+        }
+
+        .verde { 
+            color: white; 
+            background-color: green; 
+        }
+
+        .rojo { 
+            color: white; 
+            background-color: red; 
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 20px 0;
+            font-size: 16px;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Monitor de Estacionamiento</h1>
+    <h1>ParkNow</h1>
+    <a href="http://localhost/Crea-J-2024/proyecto/src/index.php" class="button">Regresar al Inicio</a>
+    <h1>Planta baja</h1>
+    <div class="grid-container">
+        <div class="sensor">
+            <div>Estacionamiento 1:</div>
+            <span id="sensor1" class="verde">-</span>
+        </div>
+        <div class="sensor">
+            <div>Estacionamiento 2:</div>
+            <span id="sensor2" class="verde">-</span>
+        </div>
+        <div class="sensor">
+            <div>Estacionamiento 3:</div>
+            <span id="sensor3" class="verde">-</span>
+        </div>
+    </div>
+    <h1>Planta alta</h1>
+    <div class="grid-container">
+        <div class="sensor">
+            <div>Estacionamiento 4:</div>
+            <span id="sensor4" class="verde">-</span>
+        </div>
+        <div class="sensor">
+            <div>Estacionamiento 5:</div>
+            <span id="sensor5" class="verde">-</span>
+        </div>
+        <div class="sensor">
+            <div>Estacionamiento 6:</div>
+            <span id="sensor6" class="verde">-</span>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        socket.on('actualizar-sensores', (datosSensor) => {
+            actualizarEstadoSensor('sensor1', datosSensor.Sensor1);
+            actualizarEstadoSensor('sensor2', datosSensor.Sensor2);
+            actualizarEstadoSensor('sensor3', datosSensor.Sensor3);
+            actualizarEstadoSensor('sensor4', datosSensor.Sensor4);
+            actualizarEstadoSensor('sensor5', datosSensor.Sensor5);
+            actualizarEstadoSensor('sensor6', datosSensor.Sensor6);
+        });
+
+        function actualizarEstadoSensor(id, valor) {
+            const elemento = document.getElementById(id);
+
+            if (valor === 0) { 
+                elemento.textContent = "Detectado";
+                elemento.classList.remove('verde');
+                elemento.classList.add('rojo');
+            } else {
+                elemento.textContent = "No Detectado";
+                elemento.classList.remove('rojo');
+                elemento.classList.add('verde');
+            }
+        }
+    </script>
+</body>
+</html>

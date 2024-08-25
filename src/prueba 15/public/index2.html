@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="img/logo.png" type="image/x-icon">
+    <title>Datos del Sensor</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .sensor { margin: 20px; }
+        .sensor span { 
+            font-weight: bold; 
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .verde { color: white; background-color: green; }
+        .rojo { color: white; background-color: red; }
+    </style>
+</head>
+<body>
+    <h1>Monitor de Sensores</h1>
+    <div class="sensor">Sensor 1: <span id="sensor1" class="verde">-</span></div>
+    <div class="sensor">Sensor 2: <span id="sensor2" class="verde">-</span></div>
+    <div class="sensor">Sensor 3: <span id="sensor3" class="verde">-</span></div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        socket.on('actualizar-sensores', (datosSensor) => {
+            actualizarEstadoSensor('sensor1', datosSensor.Sensor1);
+            actualizarEstadoSensor('sensor2', datosSensor.Sensor2);
+            actualizarEstadoSensor('sensor3', datosSensor.Sensor3);
+        });
+
+        function actualizarEstadoSensor(id, valor) {
+            const elemento = document.getElementById(id);
+
+            if (valor === 0) { 
+                elemento.textContent = "Detectado";
+                elemento.classList.remove('verde');
+                elemento.classList.add('rojo');
+            } else {
+                elemento.textContent = "No Detectado";
+                elemento.classList.remove('rojo');
+                elemento.classList.add('verde');
+            }
+        }
+    </script>
+</body>
+</html>
